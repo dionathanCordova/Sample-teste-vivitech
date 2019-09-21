@@ -1,0 +1,101 @@
+{% extends 'base.html.twig' %}
+
+{% block title %} Criar Usuário {% endblock %}
+
+    
+{% block body %} 
+    <!-- Sing in  Form -->
+    <section class="sign-in">
+        <div class="container-cadastro">
+            <div class="signin-content">
+                <div class="signin-image rounded">
+                    <!-- <figure class="rounded"> -->
+                        <img src="{{ asset('images/signin-image.jpg')}}" class="rounded-circle" alt="sing up image">
+                    <!-- </figure> -->
+                </div>
+
+                <div class="signin-form">
+                    <h2 class="form-title">Alterar dados</h2>
+                    <form method="POST" class="register-form" id="register-form">
+                        <div class="form-group">
+                            <label for="name"><i class="zmdi zmdi-account material-icons-name"></i></label>
+                            <input type="text" name="nome" id="nome" placeholder="{{ user.nome}}" value="{{ user.nome}}"/>
+                        </div>
+                        <div class="form-group">
+                            <label for="email"><i class="zmdi zmdi-email"></i></label>
+                            <input type="email" name="email" id="email" placeholder="{{ user.email}}" value="{{ user.email}}"/>
+                        </div>
+                        <div class="form-group">
+                            <label for="pass"><i class="zmdi zmdi-lock"></i></label>
+                            <input type="password" name="senha" id="senha" placeholder="{{ user.password}}" value="{{ user.password}}"/>
+                        </div>
+                        <div class="form-group">
+                            <label for="re-pass"><i class="zmdi zmdi-lock-outline"></i></label>
+                            <input type="password" name="re_pass" id="senha2" placeholder="{{ user.password}}" value="{{ user.password}}"/>
+                        </div>
+
+                        <input type="hidden" value="{{user.id}}" id='id_user'>
+
+                        <div class="form-group form-button">
+                            <input type="button" name="signup" id="myBtn" class="form-submit" value="Editar"/>
+                        </div>
+                    </form><br>
+
+                    <div class="alert alert-danger" style="display: none">
+                        <strong>Aviso!</strong><span></span>
+                    </div>
+    
+                    <div class="alert alert-success" style="display: none">
+                        <strong>Success!</strong><span></span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+   
+    <div class="alert alert-danger" style="display: none">
+        <strong>Aviso!</strong><span></span>
+    </div>
+
+    <script>
+        var nome = document.querySelector('#nome');
+        var email = document.querySelector('#email');
+        var senha = document.querySelector('#senha');
+        var senha2 = document.querySelector('#senha2');
+        var id_user = document.querySelector('#id_user');
+
+        document.getElementById("myBtn").addEventListener("click", function() {
+            if(senha.value != senha2.value) {
+                document.querySelector('.alert-danger').style.display = 'block';
+                document.querySelector('.alert-danger span').innerText = ' As senhas não são identicas';
+                return false;
+            }else{
+                let formData = new FormData();
+                formData.append("nome", nome.value);
+                formData.append("email", email.value);
+                formData.append("senha", senha.value);
+                formData.append("id_usuario", id_user.value);
+                        
+                fetch('/userEdit/'+id_user.value, {
+                    method: 'POST', 
+                    body: formData,
+                })
+                .then((response) => { return response.json();})
+                .then((responseJson) => {
+                     // MONTA O BOX AVISANDO QUE O CADASTRO FOI EFETUADO
+                     if(responseJson != '404') {
+                        document.querySelector('.alert-danger').style.display = 'none';
+                        document.querySelector('.alert-success').style.display = 'block';
+                        document.querySelector('.alert-success span').innerText = ' Alteração concluída';
+                    }
+
+                    window.location = '/';    
+                })
+                .catch((error) => {
+                    console.error(error);
+                });
+            }
+        });
+    </script>
+
+{% endblock %}

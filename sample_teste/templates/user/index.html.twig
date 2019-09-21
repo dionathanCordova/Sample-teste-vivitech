@@ -1,0 +1,73 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Hello UserController!{% endblock %}
+
+{% block body %}
+<style>
+    .example-wrapper { margin: 1em auto; max-width: 800px; width: 95%; font: 18px/1.5 sans-serif; }
+    .example-wrapper code { background: #F5F5F5; padding: 2px 6px; }
+</style>
+    <div class="container-cadastro">
+        <div class="signin-content">
+            <div class="signin-form-cadastro">
+                <h2 class="form-title">Usuários Cadastrados </h2>
+                {% if users %}
+                <table class="table table-striped">
+                    <thead>
+                        <tr>
+                            <th>#</th>
+                            <th>Nome</th>
+                            <th>Email</th>
+                            <th>Editar</th>
+                            <th>Deletar</th>
+                        </tr>
+                        </thead>
+                    <tbody id='usuarios'>
+                        {% for user in users %}
+                        <tr id='user_{{user.id}}'>
+                            <td>{{user.id}}</td>
+                            <td>{{user.nome}}</td>
+                            <td>{{user.email}}</td>
+                            <td>
+                                <a href="/userView/{{user.id}}" class='btn btn-dark btn-sm'>Editar</a>
+                            </td>
+                            <td>
+                                <a href="#" class='btn btn-danger btn-sm btnDelete' data-id="{{user.id}}">Deletar</a>
+                            </td>
+                        </tr>
+                        {% endfor %}            
+                    </tbody>
+                </table>
+                {% endif %}
+            </div>
+        </div>
+    </div>
+</div>
+{% block javascript %}
+ <script>
+
+    const usuarios = document.querySelector('#usuarios');
+
+    if(usuarios) {
+        usuarios.addEventListener('click', e => {
+            if(e.target.className === 'btn btn-danger btn-sm btnDelete') {
+                if(confirm('Deseja realmente excluir este usuário?')) {
+                    const id = e.target.getAttribute('data-id');
+
+                    fetch(`/userDelete/${id}`, {
+                        method: 'DELETE'
+                    })
+                    .then((response) => { return response.json();})
+                    .then((responseJson) => {
+                        document.querySelector("#user_" + responseJson).remove()   
+                    })
+                    .catch((error) => {
+                        console.error(error);
+                    });
+                }
+            }
+        })
+    }
+ </script>
+{% endblock %}
+{% endblock %}

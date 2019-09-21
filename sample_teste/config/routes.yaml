@@ -2,6 +2,18 @@ index:
    path: /
    controller: App\Controller\HomeController::index
 
-home:
-  path: /home/
-  controller: App\Controller\HomeController::home
+# home:
+#   path: /hello
+#   controller: App\Controller\HomeController::hello
+
+# teste:
+#   path: /teste
+#   controller: App\Controller\HomeController::teste
+
+# user:
+#    path: /user/
+#    controller: App\Controller\UserController::index
+
+# usuarios:
+#    path: /users;
+#    controller: App\Controller\HomeController::index
