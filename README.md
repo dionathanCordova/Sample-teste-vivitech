@@ -7,7 +7,7 @@
 <H1>Uma aplicação teste. </H1>
 
 <p>Para iniciar a aplicação seguir os passos abaixo:</o>
-<p>1 - Conar este repositório</o>
+<p>1 - Clonar este repositório</o>
 <p>2 - Após clonar, no terminal acesse o diretorio "sample_teste" que esta dentro do arquivo clonado</o>
 <p>3 - Apos isso, deve-se configurar a conexão ao banco de dados como o nome de administrador e senha no arquivo ".env" que está no diretório raiz do projeto</o>
 <p>4 - Na linha 27: alterar as configuração conforme os dados de acesso a sua maquina está configurada "DATABASE_URL=mysql://username:password@127.0.0.1:3306/nomeDoBanco"</o>
