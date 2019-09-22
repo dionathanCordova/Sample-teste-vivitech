@@ -10,7 +10,14 @@
     <div class="container-cadastro">
         <div class="signin-content">
             <div class="signin-form-cadastro">
-                <h2 class="form-title">Usuários Cadastrados </h2>
+                <div class='col-sm-12 row'>
+                    <div class='col-sm-9'>
+                        <h2 class="form-title">Usuários Cadastrados </h2>
+                    </div>
+                    
+                </div>
+                   
+               
                 {% if users %}
                 <table class="table table-striped">
                     <thead>
@@ -38,7 +45,11 @@
                         {% endfor %}            
                     </tbody>
                 </table>
+       
                 {% endif %}
+                    <a class="nav-link" href="{{ path('user-create')}}">
+                        <button type="button" name="signup" id="myBtn" class="form-submit btn btn-sm" value="Register">Add User</button>
+                    </a>
             </div>
         </div>
     </div>

@@ -1,24 +1,22 @@
 {% extends 'base.html.twig' %}
 {% block body %}
-    <div>
-        <h1>Let's Explore Symfony 4</h1>
-        <p class="lead">Lorem ipsum dolor sit amet, consectetur adipiscing elit. Cras rutrum sapien mauris, venenatis
-            facilisis neque tincidunt vel. Maecenas vel felis vel turpis scelerisque eleifend. Fusce nec purus egestas,
-            efficitur nisi ac, ultrices nulla. Pellentesque eu mollis tortor, in mollis nisl. Maecenas rhoncus quam non
-            lacinia mollis.
-        </p>
+    <div class="container-Home">
+        <div>
+            <h1>Descrição do Sample/Test</h1>
+            <p>Teste realizado por Dionathan de Córdova<p><br>
+            <h3> Vamos as peças do nosso cenário de Test </h3>
 
-        <!-- O teste pe um parametro que esta vindo do controller -->
-        {% if teste is defined %}
-            <h3>{{teste}}</h3>
-        {% endif %}
+            <ul>
+                {% for post in posts %}
+                    {% if post.id == 5 %}
+                        <br> <h3> Bonus: </h3>
+                    {% endif %}
+                <li><p class="lead">{{ post.id }} . {{post.nome}} <br> R: {{ post.done }}</p></li><br>
+                {% endfor %}
+            </ul>
 
-        <ul>
-            {% for post in posts %}
-            <li>{{ post.id }} - {{post.nome}} - {{ post.data | date('d-m-Y H:i' )}}</li>
-            {% endfor %}
-        </ul>
-        
+            <p class="lead">Obrigado pela oportunidade de participar deste Teste. </p>
+        </div>
     </div>
 
 {% endblock %}
