@@ -15,6 +15,7 @@
 <p>6 - Ative seu servidor de banco de dados local ex: "XAMP / WAMP"</p>
 <p>7 - Execute o comando "php bin/console doctrine:database:create", isso fará que o banco de dados seja criado na sua maquina</p>
 <p>8 - Execute o comando "php bin/console doctrine:migrations:migrate", isso fará que a classe do ENTITY seja executada, então são criadas as tabelas</p>
+<p>9 - A seguinte mensagem será apresentada no terminal "WARNING! You are about to execute a database migration that could result in schema changes and data loss. Are you sure you wish to continue? (y/n)", apenas digite "y" e depois a tecla "ENTER"</p>
 <p>9 - Execute o comando "php -S localhost:8080 -t public", este comando executará o servidor interno do php</p>
 <p>10 - Acesse no navegor o endereço http://localhost:8080/</p>
 
