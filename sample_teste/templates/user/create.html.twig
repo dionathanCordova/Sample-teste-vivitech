@@ -31,8 +31,8 @@
                 </div>
 
                 <div class="alert alert-success" style="display: none">
-                        <strong>Success!</strong><span></span>
-                    </div>
+                    <strong>Success!</strong><span></span>
+                </div>
             </div>
         </div>
     </div>
@@ -62,16 +62,21 @@
                 })
                 .then((response) => { return response.json();})
                 .then((responseJson) => {
-                    
+                    console.log(responseJson);
                     // MONTA O BOX AVISANDO QUE O CADASTRO FOI EFETUADO
-                    if(responseJson != '404') {
+                    if(responseJson == '200') {
                         document.querySelector('.alert-danger').style.display = 'none';
                         document.querySelector('.alert-success').style.display = 'block';
                         document.querySelector('.alert-success span').innerText = ' Cadastro efetuado';
+                        window.location = '/';
+                    }else{
+                        document.querySelector('.alert-success').style.display = 'none';
+                        document.querySelector('.alert-danger').style.display = 'block';
+                        document.querySelector('.alert-danger span').innerText = responseJson;
+                        return false;
                     }
 
-                    window.location = '/';
-                    
+
                 })
                 .catch((error) => {
                     console.error(error);

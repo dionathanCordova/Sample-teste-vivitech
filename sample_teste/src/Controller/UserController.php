@@ -8,6 +8,7 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Security\Core\User\User;
 use App\Entity\Users;
+use Symfony\Component\Routing\RequestContext;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Method;
 
 class UserController extends AbstractController
@@ -17,19 +18,6 @@ class UserController extends AbstractController
     */
     public function index()
     {
-
-        // $users = array(
-        //     [
-        //         'id' => 1,
-        //         'nome' => 'dionathan',
-        //         'email' => 'dntcordova@hotmai.com'
-        //     ],
-        //     [
-        //         'id' => 2,
-        //         'nome' => 'Namorada do dionathan',
-        //         'email' => 'linda@hotmai.com'
-        //     ]
-        // );
 
         $users = $this->getDoctrine()->getRepository(Users::class)->findAll();
 
@@ -55,28 +43,34 @@ class UserController extends AbstractController
     */
     public function save(Request $request) {
         $data = $request->request->all();
-
-        $query = $em->createQuery('SELECT u FROM MyProject\Model\User u WHERE u.age > 20');
+        $email = $data['email'];
+        $query2 = $this->getDoctrine()->getManager();
+        $query = $query2->createQuery("SELECT u.email FROM App\Entity\Users u WHERE u.email = '$email'");
         $users = $query->getResult();
 
-        $user = new Users();
-        $user->setEmail($data['email']);
-        $user->setPassword(addslashes(sha1($data['senha'])));
-        $user->setCreatedAt(new \DateTime('now', new \DateTimeZone('America/Sao_Paulo')));
-        $user->setUpdatedAt(new \DateTime('now', new \DateTimeZone('America/Sao_Paulo')));
-
-        $doctrine = $this->getDoctrine()->getManager();
-        // INICIAR A PERSISTENCIA DO METODO NO BANCO
-        $doctrine->persist($user);
-        // EXECUTAR A OPERAÇÂO
-        $doctrine->flush();
-
-        if($user->getId()) {
-            $response = '200';
+        if(count($users) > 0) {
+            $response = ' Este email já possui usuário vinculado, por favor selecione outro email!';
+            return new Response(json_encode($response));
         }else{
-            $response = '404';
+            $user = new Users();
+            $user->setEmail($data['email']);
+            $user->setPassword(addslashes(sha1($data['senha'])));
+            $user->setCreatedAt(new \DateTime('now', new \DateTimeZone('America/Sao_Paulo')));
+            $user->setUpdatedAt(new \DateTime('now', new \DateTimeZone('America/Sao_Paulo')));
+    
+            $doctrine = $this->getDoctrine()->getManager();
+            // INICIAR A PERSISTENCIA DO METODO NO BANCO
+            $doctrine->persist($user);
+            // EXECUTAR A OPERAÇÂO
+            $doctrine->flush();
+    
+            if($user->getId()) {
+                $response = '200';
+            }else{
+                $response = '404';
+            }
+            return new Response(json_encode($response));
         }
-        return new Response(json_encode($response . '- id: ' . $user->getId()));
     }
 
     /**
@@ -98,22 +92,33 @@ class UserController extends AbstractController
     */
     public function userEdit(Request $request, $param) {
         $data = $request->request->all();
-        $user = $this->getDoctrine()->getRepository(Users::class)->find($param);
-        $user->setNome($data['nome']);
-        $user->setEmail($data['email']);
-        $user->setPassword(addslashes(sha1($data['senha'])));
-        $user->setCreatedAt(new \DateTime('now', new \DateTimeZone('America/Sao_Paulo')));
-        $user->setUpdatedAt(new \DateTime('now', new \DateTimeZone('America/Sao_Paulo')));
 
-        $doctrine = $this->getDoctrine()->getManager();
-        $doctrine->flush();
+        $email = $data['email'];
+        $query2 = $this->getDoctrine()->getManager();
+        $query = $query2->createQuery("SELECT u.email FROM App\Entity\Users u WHERE u.email = '$email' AND u.id != $param ");
+        $users = $query->getResult();
 
-        if($user->getId()) {
-            $response = '200';
+        if(count($users) > 0) {
+            $response = ' Este email já possui usuário vinculado, por favor selecione outro email!';
+            return new Response(json_encode($response));
         }else{
-            $response = '404';
+            $user = $this->getDoctrine()->getRepository(Users::class)->find($param);
+            $user->setNome($data['nome']);
+            $user->setEmail($data['email']);
+            $user->setPassword(addslashes(sha1($data['senha'])));
+            $user->setCreatedAt(new \DateTime('now', new \DateTimeZone('America/Sao_Paulo')));
+            $user->setUpdatedAt(new \DateTime('now', new \DateTimeZone('America/Sao_Paulo')));
+    
+            $doctrine = $this->getDoctrine()->getManager();
+            $doctrine->flush();
+    
+            if($user->getId()) {
+                $response = '200';
+            }else{
+                $response = '404';
+            }
+            return new Response(json_encode($response));
         }
-        return new Response(json_encode($response . '- id: ' . $user->getId()));
     }
   
     /**
@@ -130,5 +135,52 @@ class UserController extends AbstractController
         $doctrine->flush();
 
         return new Response(json_encode($param));
+    }
+
+     /**
+    * @Route("setAvatar/", name="setAvatar")W
+    * @Method({"DELETE"})
+    */
+    public function setAvatar(Request $request) {
+        // PEGANDO A BASE URL PARA ENCONTRAR O ARQUIVO COM O JAVASCRIPT
+        if(isset($_SERVER['HTTPS'])){
+            $protocol = ($_SERVER['HTTPS'] && $_SERVER['HTTPS'] != "off") ? "https" : "http";
+        }
+        else{
+            $protocol = 'http';
+        }
+        $url = $protocol . "://" . $_SERVER['HTTP_HOST'] .'/';
+
+        $filename = $_FILES['file']['name'];
+
+        /* Location */
+        $location = "upload/". date('H-i-s') .$filename;
+        $uploadOk = 1;
+        $imageFileType = pathinfo($location,PATHINFO_EXTENSION);
+
+        /* Valid Extensions */
+        $valid_extensions = array("jpg","jpeg","png");
+        /* Check file extension */
+        if( !in_array(strtolower($imageFileType),$valid_extensions) ) {
+            $uploadOk = 0;
+        }
+
+        if($uploadOk == 0){
+            return new Response(json_encode(0));
+        }else{
+            /* Upload file */
+            if(move_uploaded_file($_FILES['file']['tmp_name'],$location)){
+                $data = $request->request->all();
+                $id = $data['id_user'];
+
+                $query = $this->getDoctrine()->getManager();
+                $query = $query->createQuery("UPDATE App\Entity\Users u SET u.avatar = '$location' WHERE u.id = $id");
+                $users = $query->getResult();
+
+                return new Response(json_encode(['response' => $url . $location, 'filename' => 'teste']));
+            }else{
+                return new Response(json_encode(0));
+            }
+        }
     }
 }
