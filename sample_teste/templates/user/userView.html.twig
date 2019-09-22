@@ -127,8 +127,6 @@ div.upload input {
             }
         });
 
-        // document.getElementById("form-avatar").addEventListener("change", function() {
-           
 
         $("#myform").change(function(){
 
@@ -149,10 +147,6 @@ div.upload input {
             .then((response) => { return response.json();})
             .then((responseJson) => {
                 $(".img").attr("src", responseJson.response); 
-
-                console.log('endereco: ' + localImages + responseJson.filename);
-                console.log('filename: ' + responseJson.filename);
-                console.log('response: ' + responseJson.response);
             })
             .catch((error) => {
                 console.error(error);
