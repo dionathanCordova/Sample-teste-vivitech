@@ -1,13 +1,10 @@
 # Sample-teste-vivitech 
 
-<h5> Desde já agradeço pela oportunidade de efetuar este teste, com ele pude aprender muitas coisas, embora em tão pouco tempo, o conhecimento que tive nesse teste será utilizado em varias aplicações futuras.<br>
+<h5> Desde já agradeço pela oportunidade de efetuar este teste, com ele pude aprender muitas coisas, embora em tão pouco tempo, o conhecimento que tive nesse teste será utilizado em varias aplicações futuras.<br><br>
 
 Para executar esta aplicação pode acessar o link https://sampleteste.herokuapp.com/Home <br>
 
-Ou se preferir seguir os passo informados abaixo para rodar esta aplicação localmente. </h3>
-
-
-<br>
+Ou se preferir, siga os passo informados abaixo para rodar esta aplicação localmente. </h3>
 
 <H1>Uma aplicação teste. </H1>
 
